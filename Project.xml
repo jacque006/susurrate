@@ -46,6 +46,7 @@
 	<haxelib name="haxefmod" />
 	<haxelib name="newgrounds" />
 	<haxelib name="hscript" />
+	<haxelib name="isometric" />
 
 	<!-- for ldtk level integration -->
 	<haxelib name="ldtk-haxe-api" />

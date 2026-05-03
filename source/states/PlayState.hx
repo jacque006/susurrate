@@ -14,10 +14,14 @@ import events.EventBus;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionableState;
+import isometric.IsoSprite;
 
 using states.FlxStateExt;
 
 class PlayState extends FlxTransitionableState {
+	/*
+     * Default template setup
+	 */
 	var player:FlxSprite;
 	var midGroundGroup = new FlxGroup();
 	var activeCameraTransition:CameraTransition = null;
@@ -25,6 +29,12 @@ class PlayState extends FlxTransitionableState {
 	var transitions = new FlxTypedGroup<CameraTransition>();
 
 	var ldtk = new LdtkProject();
+
+	/*
+	 * Isometric
+	 */
+
+	var cube:IsoSprite;
 
 	override public function create() {
 		super.create();
