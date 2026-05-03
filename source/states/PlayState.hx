@@ -1,5 +1,6 @@
 package states;
 
+import iso.IsoSprite;
 import todo.TODO;
 import flixel.group.FlxGroup;
 import flixel.math.FlxRect;
@@ -14,7 +15,6 @@ import events.EventBus;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionableState;
-import isometric.IsoSprite;
 
 using states.FlxStateExt;
 
