@@ -1,6 +1,7 @@
 package states;
 
 import iso.IsoSprite;
+import iso.topo.Tophographic;
 import todo.TODO;
 import flixel.group.FlxGroup;
 import flixel.math.FlxRect;
@@ -22,7 +23,6 @@ class PlayState extends FlxTransitionableState {
 	/*
      * Default template setup
 	 */
-	var player:FlxSprite;
 	var midGroundGroup = new FlxGroup();
 	var activeCameraTransition:CameraTransition = null;
 
@@ -34,7 +34,8 @@ class PlayState extends FlxTransitionableState {
 	 * Isometric
 	 */
 
-	var cube:IsoSprite;
+	var graph:Topographic;
+	var player:IsoSprite;
 
 	override public function create() {
 		super.create();
@@ -47,12 +48,18 @@ class PlayState extends FlxTransitionableState {
 		});
 
 		// QLog.error('Example error');
+		TODO.sfx('exampleSound');
+
+		graph = new Topographic();
 
 		// Build out our render order
 		add(midGroundGroup);
 		add(transitions);
+		add(graph);
 
 		loadLevel("Level_0");
+
+		camera.scroll.set(-FlxG.camera.width / 2, -10);
 	}
 
 	function loadLevel(level:String) {
@@ -64,8 +71,10 @@ class PlayState extends FlxTransitionableState {
 		FlxG.worldBounds.copyFrom(level.terrainLayer.getBounds());
 
 		player = new Player(level.spawnPoint.x, level.spawnPoint.y);
+		graph.add(player);
+		graph.rebuild();
+
 		camera.follow(player);
-		add(player);
 
 		for (t in level.camTransitions) {
 			transitions.add(t);
@@ -99,14 +108,14 @@ class PlayState extends FlxTransitionableState {
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
+		graph.rebuild();
+
 		if (FlxG.mouse.justPressed) {
 			EventBus.fire(new Click(FlxG.mouse.x, FlxG.mouse.y));
 		}
 
 		FlxG.collide(midGroundGroup, player);
 		handleCameraBounds();
-
-		TODO.sfx('scarySound');
 	}
 
 	function handleCameraBounds() {
