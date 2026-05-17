@@ -1,6 +1,9 @@
 package states;
 
+import iso.Overlap;
+import iso.debug.Debug;
 import iso.IsoSprite;
+import iso.Grid;
 import iso.topo.Tophographic;
 import todo.TODO;
 import flixel.group.FlxGroup;
@@ -13,8 +16,10 @@ import achievements.Achievements;
 import entities.Player;
 import events.gen.Event;
 import events.EventBus;
+import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.util.FlxColor;
 import flixel.addons.transition.FlxTransitionableState;
 
 using states.FlxStateExt;
@@ -33,14 +38,21 @@ class PlayState extends FlxTransitionableState {
 	/*
 	 * Isometric
 	 */
-
 	var graph:Topographic;
 	var player:IsoSprite;
 
 	override public function create() {
 		super.create();
 
+		bgColor = FlxColor.GRAY.getDarkened(.5);
 		FlxG.camera.pixelPerfectRender = true;
+
+		#if isodebug
+		FlxG.camera.width = Std.int(FlxG.camera.width / 2);
+		Debug.dbgCam = new FlxCamera(Std.int(camera.x + camera.width), 0, camera.width, camera.height, camera.zoom);
+		Debug.dbgCam.bgColor = FlxColor.RED.getDarkened(0.6);
+		FlxG.cameras.add(Debug.dbgCam, false);
+		#end
 
 		Achievements.onAchieve.add(handleAchieve);
 		EventBus.subscribe(ClickCount, (c) -> {
@@ -70,15 +82,16 @@ class PlayState extends FlxTransitionableState {
 		midGroundGroup.add(level.terrainLayer);
 		FlxG.worldBounds.copyFrom(level.terrainLayer.getBounds());
 
-		player = new Player(level.spawnPoint.x, level.spawnPoint.y);
+		// player = new Player(level.spawnPoint.x, level.spawnPoint.y);
+		player = new Player(0, 0);
 		graph.add(player);
 		graph.rebuild();
 
 		camera.follow(player);
 
-		for (t in level.camTransitions) {
-			transitions.add(t);
-		}
+		// for (t in level.camTransitions) {
+		// 	transitions.add(t);
+		// }
 
 		for (_ => zone in level.camZones) {
 			if (zone.containsPoint(level.spawnPoint)) {
@@ -99,6 +112,9 @@ class PlayState extends FlxTransitionableState {
 			o.destroy();
 		}
 		midGroundGroup.clear();
+
+		// TODO Do we need a way to clear the graph on unload?
+		graph.rebuild();
 	}
 
 	function handleAchieve(def:AchievementDef) {
@@ -106,6 +122,10 @@ class PlayState extends FlxTransitionableState {
 	}
 
 	override public function update(elapsed:Float) {
+		Grid.drawGrid(5, 5);
+		graph.drawDebug();
+		FlxG.overlap(midGroundGroup, midGroundGroup, null, Overlap.isoCollide);
+
 		super.update(elapsed);
 
 		graph.rebuild();
@@ -115,40 +135,41 @@ class PlayState extends FlxTransitionableState {
 		}
 
 		FlxG.collide(midGroundGroup, player);
-		handleCameraBounds();
+		// handleCameraBounds();
 	}
 
-	function handleCameraBounds() {
-		if (activeCameraTransition == null) {
-			FlxG.overlap(player, transitions, (p, t) -> {
-				activeCameraTransition = cast t;
-			});
-		} else if (!FlxG.overlap(player, activeCameraTransition)) {
-			var bounds = activeCameraTransition.getRotatedBounds();
-			for (dir => camZone in activeCameraTransition.camGuides) {
-				switch (dir) {
-					case N:
-						if (player.y < bounds.top) {
-							setCameraBounds(camZone);
-						}
-					case S:
-						if (player.y > bounds.bottom) {
-							setCameraBounds(camZone);
-						}
-					case E:
-						if (player.x > bounds.right) {
-							setCameraBounds(camZone);
-						}
-					case W:
-						if (player.x < bounds.left) {
-							setCameraBounds(camZone);
-						}
-					default:
-						QLog.error('camera transition area has unsupported cardinal direction ${dir}');
-				}
-			}
-		}
-	}
+	// Used for transitioning camera between areas, not needed atm
+	// function handleCameraBounds() {
+	// 	if (activeCameraTransition == null) {
+	// 		FlxG.overlap(player, transitions, (p, t) -> {
+	// 			activeCameraTransition = cast t;
+	// 		});
+	// 	} else if (!FlxG.overlap(player, activeCameraTransition)) {
+	// 		var bounds = activeCameraTransition.getRotatedBounds();
+	// 		for (dir => camZone in activeCameraTransition.camGuides) {
+	// 			switch (dir) {
+	// 				case N:
+	// 					if (player.y < bounds.top) {
+	// 						setCameraBounds(camZone);
+	// 					}
+	// 				case S:
+	// 					if (player.y > bounds.bottom) {
+	// 						setCameraBounds(camZone);
+	// 					}
+	// 				case E:
+	// 					if (player.x > bounds.right) {
+	// 						setCameraBounds(camZone);
+	// 					}
+	// 				case W:
+	// 					if (player.x < bounds.left) {
+	// 						setCameraBounds(camZone);
+	// 					}
+	// 				default:
+	// 					QLog.error('camera transition area has unsupported cardinal direction ${dir}');
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	public function setCameraBounds(bounds:FlxRect) {
 		camera.setScrollBoundsRect(bounds.x, bounds.y, bounds.width, bounds.height);

@@ -20,3 +20,4 @@ lime build html5
 ### addiitonal flags
 - `-debug`: debug build
 - `-D play`: skip splash screens & menu to directly play game
+- `-D isodebug`: enable debugging of isometric view
