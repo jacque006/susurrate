@@ -1,5 +1,6 @@
 package states;
 
+import entities.Koob;
 import iso.Overlap;
 import iso.debug.Debug;
 import iso.IsoSprite;
@@ -31,9 +32,10 @@ class PlayState extends FlxTransitionableState {
 	var midGroundGroup = new FlxGroup();
 	var activeCameraTransition:CameraTransition = null;
 
-	var transitions = new FlxTypedGroup<CameraTransition>();
+	// var transitions = new FlxTypedGroup<CameraTransition>();
 
 	var ldtk = new LdtkProject();
+	var level:Level;
 
 	/*
 	 * Isometric
@@ -66,7 +68,7 @@ class PlayState extends FlxTransitionableState {
 
 		// Build out our render order
 		add(midGroundGroup);
-		add(transitions);
+		// add(transitions);
 		add(graph);
 
 		loadLevel("Level_0");
@@ -74,16 +76,31 @@ class PlayState extends FlxTransitionableState {
 		camera.scroll.set(-FlxG.camera.width / 2, -10);
 	}
 
-	function loadLevel(level:String) {
+	function loadLevel(name:String) {
 		unload();
 
-		var level = new Level(level);
+		level = new Level(name);
 		FmodPlugin.playSong(level.raw.f_Music);
-		midGroundGroup.add(level.terrainLayer);
+
 		FlxG.worldBounds.copyFrom(level.terrainLayer.getBounds());
 
-		// player = new Player(level.spawnPoint.x, level.spawnPoint.y);
-		player = new Player(0, 0);
+		// Add iso level entities
+		for (x in 0...level.terrainLayer.widthInTiles) {
+			for (y in 0...level.terrainLayer.heightInTiles) {
+				var tIdx = level.terrainLayer.getTileIndex(x, y);
+				// TODO Handle other tile types
+				if (tIdx != 0) {
+					var mIdx = level.terrainLayer.getMapIndex(x, y);
+					var tPos = level.terrainLayer.getTilePos(mIdx);
+					if (tPos != null) {
+						var koob = new Koob(tPos.x, tPos.y);
+						midGroundGroup.add(koob);
+					}
+				}
+			}
+		}
+
+		player = new Player(level.spawnPoint.x, level.spawnPoint.y);
 		graph.add(player);
 		graph.rebuild();
 
@@ -103,10 +120,10 @@ class PlayState extends FlxTransitionableState {
 	}
 
 	function unload() {
-		for (t in transitions) {
-			t.destroy();
-		}
-		transitions.clear();
+		// for (t in transitions) {
+		// 	t.destroy();
+		// }
+		// transitions.clear();
 
 		for (o in midGroundGroup) {
 			o.destroy();
@@ -122,8 +139,9 @@ class PlayState extends FlxTransitionableState {
 	}
 
 	override public function update(elapsed:Float) {
-		Grid.drawGrid(5, 5);
+		Grid.drawGrid(level.terrainLayer.widthInTiles, level.terrainLayer.heightInTiles);
 		graph.drawDebug();
+
 		FlxG.overlap(midGroundGroup, midGroundGroup, null, Overlap.isoCollide);
 
 		super.update(elapsed);

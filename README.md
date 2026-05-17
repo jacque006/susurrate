@@ -17,7 +17,11 @@ lime build html5
 ## run
 `lime run html5`
 
-### addiitonal flags
+with all debug flags
+
+`lime test html5 -debug -D play -D isodebug`
+
+### flags
 - `-debug`: debug build
 - `-D play`: skip splash screens & menu to directly play game
 - `-D isodebug`: enable debugging of isometric view
