@@ -20,15 +20,12 @@ class Player extends IsoSprite {
 
 		sprite = new FlxSprite(AssetPaths.Block_5x5x10__png);
 		sprite.offset.set(10, 20);
-
-		trace("player create");
 	}
 
 	override public function update(delta:Float) {
 		super.update(delta);
 
 		var inputDir = InputCalculator.getInputCardinal(playerNum);
-		trace('dir ${inputDir}');
 		if (inputDir != NONE) {
 			inputDir.asVector(velocity).scale(speed);
 		} else {

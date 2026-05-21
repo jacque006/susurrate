@@ -5,6 +5,7 @@ import haxe.macro.Context;
 
 using haxe.macro.Tools;
 
+// TODO Add this flixel-utils or some other common lib
 class EnumAbstract {
 	public static macro function list(e:Expr) {
 		return macro $a{
