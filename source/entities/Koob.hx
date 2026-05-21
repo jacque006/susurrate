@@ -21,5 +21,9 @@ class Koob extends IsoSprite {
 
 		sprite = new FlxSprite(AssetPaths.Block_5x5x10__png);
 		sprite.offset.set(10, 20);
+
+        // TODO Do we need to make both immovable?
+        immovable = true;
+        sprite.immovable = true;
 	}
 }

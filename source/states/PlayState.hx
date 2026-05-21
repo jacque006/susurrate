@@ -29,7 +29,7 @@ class PlayState extends FlxTransitionableState {
 	/*
      * Default template setup
 	 */
-	var midGroundGroup = new FlxGroup();
+	var collidableGroup = new FlxGroup();
 	var activeCameraTransition:CameraTransition = null;
 
 	// var transitions = new FlxTypedGroup<CameraTransition>();
@@ -67,7 +67,6 @@ class PlayState extends FlxTransitionableState {
 		graph = new Topographic();
 
 		// Build out our render order
-		add(midGroundGroup);
 		// add(transitions);
 		add(graph);
 
@@ -94,7 +93,8 @@ class PlayState extends FlxTransitionableState {
 					var tPos = level.terrainLayer.getTilePos(mIdx);
 					if (tPos != null) {
 						var koob = new Koob(tPos.x, tPos.y);
-						midGroundGroup.add(koob);
+						graph.add(koob);
+						collidableGroup.add(koob);
 					}
 				}
 			}
@@ -103,18 +103,19 @@ class PlayState extends FlxTransitionableState {
 		player = new Player(level.spawnPoint.x, level.spawnPoint.y);
 		graph.add(player);
 		graph.rebuild();
+		collidableGroup.add(player);
 
-		camera.follow(player);
+		camera.follow(player.sprite);
 
-		// for (t in level.camTransitions) {
+		// for (t in level.camTransitions)p {
 		// 	transitions.add(t);
 		// }
 
-		for (_ => zone in level.camZones) {
-			if (zone.containsPoint(level.spawnPoint)) {
-				setCameraBounds(zone);
-			}
-		}
+		// for (_ => zone in level.camZones) {
+		// 	if (zone.containsPoint(level.spawnPoint)) {
+		// 		setCameraBounds(zone);
+		// 	}
+		// }
 
 		EventBus.fire(new PlayerSpawn(player.x, player.y));
 	}
@@ -125,10 +126,10 @@ class PlayState extends FlxTransitionableState {
 		// }
 		// transitions.clear();
 
-		for (o in midGroundGroup) {
+		for (o in collidableGroup) {
 			o.destroy();
 		}
-		midGroundGroup.clear();
+		collidableGroup.clear();
 
 		// TODO Do we need a way to clear the graph on unload?
 		graph.rebuild();
@@ -142,7 +143,9 @@ class PlayState extends FlxTransitionableState {
 		Grid.drawGrid(level.terrainLayer.widthInTiles, level.terrainLayer.heightInTiles);
 		graph.drawDebug();
 
-		FlxG.overlap(midGroundGroup, midGroundGroup, null, Overlap.isoCollide);
+		// TODO Is this needed?
+		// FlxG.overlap(graph, graph, null, Overlap.isoCollide);
+		FlxG.collide(collidableGroup, collidableGroup);
 
 		super.update(elapsed);
 
@@ -152,7 +155,7 @@ class PlayState extends FlxTransitionableState {
 			EventBus.fire(new Click(FlxG.mouse.x, FlxG.mouse.y));
 		}
 
-		FlxG.collide(midGroundGroup, player);
+		// FlxG.collide(midGroundGroup, player);
 		// handleCameraBounds();
 	}
 
@@ -188,10 +191,10 @@ class PlayState extends FlxTransitionableState {
 	// 		}
 	// 	}
 	// }
-
-	public function setCameraBounds(bounds:FlxRect) {
-		camera.setScrollBoundsRect(bounds.x, bounds.y, bounds.width, bounds.height);
-	}
+	//
+	// public function setCameraBounds(bounds:FlxRect) {
+	// 	camera.setScrollBoundsRect(bounds.x, bounds.y, bounds.width, bounds.height);
+	// }
 
 	override public function onFocusLost() {
 		super.onFocusLost();
