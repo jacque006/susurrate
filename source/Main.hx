@@ -1,5 +1,6 @@
 package;
 
+import macros.EnumAbstract;
 import achievements.Achievements;
 import bitdecay.flixel.debug.DebugSuite;
 import bitdecay.flixel.debug.tools.btree.BTreeInspector;
@@ -94,7 +95,7 @@ class Main extends Sprite {
 	}
 
 	private function configureDebug() {
-		DebugSuite.init(new DebugDraw(Type.allEnums(DebugLayers)), new BTreeInspector(), new EventLog());
+		DebugSuite.init(new DebugDraw(EnumAbstract.list(DebugLayers)), new BTreeInspector(), new EventLog());
 
 		#if debug
 		var fnt = Assets.getFont(AssetPaths.Brain_Slab_8__ttf);

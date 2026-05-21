@@ -1,30 +1,25 @@
 package entities;
 
 import flixel.FlxSprite;
+import iso.IsoSprite;
+import flixel.util.FlxColor;
 import input.InputCalculator;
 import input.SimpleController;
-import bitdecay.flixel.graphics.Aseprite;
-import bitdecay.flixel.graphics.AsepriteMacros;
 
-class Player extends FlxSprite {
-	public static var anims = AsepriteMacros.tagNames("assets/aseprite/characters/player.json");
-	public static var layers = AsepriteMacros.layerNames("assets/aseprite/characters/player.json");
-	public static var eventData = AsepriteMacros.frameUserData("assets/aseprite/characters/player.json", "Layer 1");
-
+class Player extends IsoSprite {
 	var speed:Float = 150;
 	var playerNum = 0;
 
 	public function new(X:Float, Y:Float) {
+		gridWidth = 1;
+		gridLength = 1;
+		gridHeight = 1;
+
 		super(X, Y);
-		// This call can be used once https://github.com/HaxeFlixel/flixel/pull/2860 is merged
-		// FlxAsepriteUtil.loadAseAtlasAndTags(this, AssetPaths.player__png, AssetPaths.player__json);
-		Aseprite.loadAllAnimations(this, AssetPaths.player__json);
-		animation.play(anims.right);
-		animation.onFrameChange.add((anim, frame, index) -> {
-			if (eventData.exists(index)) {
-				trace('frame $index has data ${eventData.get(index)}');
-			}
-		});
+		color = FlxColor.GREEN;
+
+		sprite = new FlxSprite(AssetPaths.Block_5x5x10__png);
+		sprite.offset.set(10, 20);
 	}
 
 	override public function update(delta:Float) {
@@ -35,10 +30,6 @@ class Player extends FlxSprite {
 			inputDir.asVector(velocity).scale(speed);
 		} else {
 			velocity.set();
-		}
-
-		if (SimpleController.just_pressed(Button.A, playerNum)) {
-			color = color ^ 0xFFFFFF;
 		}
 	}
 }
