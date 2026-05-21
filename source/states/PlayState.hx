@@ -1,5 +1,6 @@
 package states;
 
+import flixel.math.FlxPoint;
 import entities.Koob;
 import iso.Overlap;
 import iso.debug.Debug;
@@ -153,6 +154,12 @@ class PlayState extends FlxTransitionableState {
 
 		if (FlxG.mouse.justPressed) {
 			EventBus.fire(new Click(FlxG.mouse.x, FlxG.mouse.y));
+
+			// Move (teleport) player to mouse on click.
+			var mPos = FlxG.mouse.getPosition();
+			var mTmp = FlxPoint.get();
+			Grid.isoToGrid(mPos.x, mPos.y, mTmp);
+			player.setPosition(mTmp.x, mTmp.y);
 		}
 
 		// FlxG.collide(midGroundGroup, player);
