@@ -4,6 +4,7 @@ Onchain turn based game protoype
 ## components
 
 - [client](./client/): Haxe Flixel game client
+- [contracts](./contracts/): Rust Fe smart contracts
 
 ## requires
 

@@ -1,0 +1,5 @@
+build:
+    fe build
+
+test:
+    fe test

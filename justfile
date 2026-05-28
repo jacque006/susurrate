@@ -1,7 +1,10 @@
-[working-directory: 'client']
-client-run:
-    lime run html5
+mod client 'client'
+mod contracts 'contracts'
 
-[working-directory: 'client']
-client-debug:
-    lime test html5 -debug -D play -D isodebug
+build-all:
+    just contracts build
+    just client build
+
+test-all:
+    just contracts test
+    just client test

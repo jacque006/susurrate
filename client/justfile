@@ -1,0 +1,11 @@
+build:
+    lime build html5
+
+test:
+    @echo "client tests not implemented. Shame shame shame..."
+
+run:
+    lime run html5
+
+debug:
+    lime test html5 -debug -D play -D isodebug
