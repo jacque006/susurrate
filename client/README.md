@@ -6,14 +6,6 @@ Susurrate game client in Haxe using [haxe-flixel](https://haxeflixel.com/)
 [Haxe (v4)](https://haxe.org/)
 [Lime](https://lime.openfl.org/)
 
-## setup
-Make sure the needed scripts in the bin folder have execute permission (`chmod -R +x ./bin/`)
-
-```sh
-./bin/init_deps.sh
-lime build html5
-```
-
 ## run
 `lime run html5`
 
