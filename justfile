@@ -1,4 +1,6 @@
-mod client 'client'
+mod game-client 'game-client'
+mod circuits 'circuits'
+mod contracts-client 'contracts-client'
 mod contracts 'contracts'
 
 build-all:

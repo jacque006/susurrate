@@ -1,0 +1,2 @@
+build:
+    @echo "ring ring ring goes the bell"

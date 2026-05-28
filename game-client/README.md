@@ -1,4 +1,4 @@
-# client
+# game-client
 Susurrate game client in Haxe using [haxe-flixel](https://haxeflixel.com/)
 
 ## requires
