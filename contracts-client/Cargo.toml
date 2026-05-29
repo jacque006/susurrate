@@ -1,0 +1,11 @@
+[package]
+name = "contracts-client"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+alloy = "2.0.5"
+wasm-bindgen = "0.2.122"

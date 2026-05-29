@@ -1,2 +1,5 @@
 build:
-    @echo "clang clang clang goes the trolley"
+    cargo build
+
+test:
+    cargo test
