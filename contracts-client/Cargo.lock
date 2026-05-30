@@ -1192,7 +1192,9 @@ name = "contracts-client"
 version = "0.1.0"
 dependencies = [
  "alloy",
+ "js-sys",
  "wasm-bindgen",
+ "wasm-bindgen-futures",
 ]
 
 [[package]]
