@@ -1,5 +1,8 @@
 build:
     cargo build
 
+build-wasm:
+    wasm-pack build --target web
+
 test:
     cargo test

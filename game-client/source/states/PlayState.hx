@@ -1,6 +1,7 @@
 package states;
 
 import flixel.math.FlxPoint;
+import contracts.CounterContract;
 import entities.Koob;
 import iso.Overlap;
 import iso.debug.Debug;
@@ -74,6 +75,8 @@ class PlayState extends FlxTransitionableState {
 		loadLevel("Level_0");
 
 		camera.scroll.set(-FlxG.camera.width / 2, -10);
+
+		testContract();
 	}
 
 	function loadLevel(name:String) {
@@ -211,5 +214,32 @@ class PlayState extends FlxTransitionableState {
 	override public function onFocus() {
 		super.onFocus();
 		this.handleFocus();
+	}
+
+	function testContract() {
+        var rpcUrl = "http://127.0.0.1:8545";
+        var contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
+		var privateKey = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"; // Anvil account #0
+
+		var contract:CounterContract;
+
+        CounterContract.create(rpcUrl, contractAddress, privateKey)
+			.then(c -> {
+				contract = c;
+				return contract.get_value();
+			})
+			.then(v -> {
+				trace("cur val: " + v);
+				return contract.increment();
+			})
+			.then(_ -> {
+				return contract.get_value();
+			})
+			.then(v -> {
+				trace("new val: " + v);
+			})
+			.catchError(err -> {
+				trace(err);
+			});
 	}
 }
