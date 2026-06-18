@@ -227,11 +227,11 @@ class PlayState extends FlxTransitionableState {
         CounterContract.create(rpcUrl, contractAddress, privateKey)
 			.then(c -> {
 				contract = c;
-				// TODO failing here now
 				return contract.get_value();
 			})
 			.then(v -> {
 				trace("cur val: " + v);
+				// TODO Failing here now
 				return contract.increment();
 			})
 			.then(_ -> {

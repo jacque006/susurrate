@@ -14,6 +14,7 @@ sol! {
         uint256 public value;
 
         function increment() external;
+        function get() view returns (uint256);
     }
 }
 
@@ -52,7 +53,7 @@ impl CounterContract {
     pub async fn get_value(&self) -> Result<BigInt, JsError> {
         let val = self
             .inner
-            .value()
+            .get()
             .call()
             .await
             .map_err(|e| JsError::new(&format!("rpc read failed: {}", e)))?;
