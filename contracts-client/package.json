@@ -1,0 +1,9 @@
+{
+  "type": "module",
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "viem": "^2.55.19"
+  }
+}
