@@ -1,9 +1,14 @@
 {
+  "name": "contracts-client",
   "type": "module",
   "devDependencies": {
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vite": "^8.2.2"
   },
   "dependencies": {
     "viem": "^2.55.19"
+  },
+  "scripts": {
+    "test": "echo 'TODO implement' && exit 1"
   }
 }

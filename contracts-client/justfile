@@ -1,8 +1,5 @@
 build:
-    cargo build
-
-build-wasm:
-    wasm-pack build --target web
+    npx vite build
 
 test:
-    cargo test
+    npm run test

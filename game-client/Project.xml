@@ -54,7 +54,7 @@
 	<haxelib name="ldtk-haxe-api" />
 
 	<!-- for evm chain interaction -->
-	<assets path="../contracts-client/pkg" rename="." include="*" />
+	<assets path="../contracts-client/dist" rename="." include="*" />
 
 	<!-- for echo physics -->
 	<!-- <haxelib name="echo-flixel" /> -->

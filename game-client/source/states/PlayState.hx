@@ -218,24 +218,18 @@ class PlayState extends FlxTransitionableState {
 
 	function testContract() {
         var rpcUrl = "http://127.0.0.1:8545";
-        var contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
+        var contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 		var privateKey = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"; // Anvil account #0
 
-		var contract:CounterContract;
-
-		trace("creating contract...");
-        CounterContract.create(rpcUrl, contractAddress, privateKey)
-			.then(c -> {
-				contract = c;
-				return contract.get_value();
-			})
+		var contract = new CounterContract(rpcUrl, contractAddress, privateKey);
+		contract.getValue()
 			.then(v -> {
 				trace("cur val: " + v);
 				// TODO Failing here now
 				return contract.increment();
 			})
 			.then(_ -> {
-				return contract.get_value();
+				return contract.getValue();
 			})
 			.then(v -> {
 				trace("new val: " + v);
