@@ -1,0 +1,5 @@
+build:
+    npx vite build
+
+test:
+    npm run test

@@ -26,6 +26,8 @@
 	<!--Mobile-specific-->
 	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" />
 
+	<template path="index.html" />
+
 	<!-- _____________________________ Path Settings ____________________________ -->
 
 	<set name="BUILD_DIR" value="export" />
@@ -50,6 +52,9 @@
 
 	<!-- for ldtk level integration -->
 	<haxelib name="ldtk-haxe-api" />
+
+	<!-- for evm chain interaction -->
+	<assets path="../contracts-client/dist" rename="." include="*" />
 
 	<!-- for echo physics -->
 	<!-- <haxelib name="echo-flixel" /> -->
